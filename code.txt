@@ -1,0 +1,983 @@
+#include<stdio.h>
+#include<time.h>
+///Selling System:
+time_t T;
+struct tm tm;
+int birth_amount=0;
+int bDiscount=0;
+
+struct customerlist
+{
+    char name[30];
+    int phoneNo;
+    char shipped[20];
+    int price;
+    int day;
+    int mon;
+    int year;
+} cList[1000];
+struct shoplist
+{
+    char shopName[30];
+    char shopOwner[30];
+    int  discount;
+    int phoneNo;
+} shop[100];
+
+FILE *passFile,*disFile,*cusFile,*cashFile,*soldFile,*clenFile,*shoplistFile,*shopinfoFile,*mallDisFile;
+char rerun='y';
+int getChoice;
+int i,len,discount_amount,opinio,slock,ulock,sSecretNo=523,uSecretNo,aDiscount;
+int nPassOne,nPassTwo,sDisount,uDiscount,sCash,sSold,searchNo,mallDis;
+int cPhone,cPrice,uCategory,uSize,uColour,sSeeCusto;
+int sPrice=1500,tPrice=900,pPrice=2000,jPrice=4000;
+char isOwner,isWtf,isDChange,cName[30],category[20],isBuyed,sCategory[20];
+
+cinofList[1000];
+///Shop Management System:
+struct shopinfo
+{
+    char shopName[30],ownerName[300];
+    int phoneNo;
+    int discount;
+} sinfoList[100];
+int main()
+{
+
+    //Get Password:
+    passFile=fopen("password.txt","r");
+    if(passFile!=NULL)
+    {
+        printf("\nPassword File Opened");
+        while(!feof(passFile))
+        {
+            fscanf(passFile,"%d",&slock);
+        }
+        fclose(passFile);
+    }
+    else
+    {
+        printf("\nPassword Not Exist");
+    }
+    //get Mall Discount
+
+    mallDisFile=fopen("malldiscount.txt","r");
+    if(mallDisFile!=NULL)
+    {
+        printf("\nMall Discount File Opened");
+        while(!feof(mallDisFile))
+        {
+            fscanf(mallDisFile,"%d",&mallDis);
+        }
+        fclose(mallDisFile);
+    }
+    else
+    {
+        printf("\n Mall discount file Not Exist");
+    }
+
+    //Get Discount:
+    disFile=fopen("discount.txt","r");
+    if(disFile!=NULL)
+    {
+        printf("\nDiscount File Opened");
+        while(!feof(passFile))
+        {
+            fscanf(disFile,"%d",&sDisount);
+        }
+        fclose(disFile);
+    }
+    else
+    {
+        printf("\nPassword Not Exist");
+    }
+    //Get Customer length:
+    clenFile=fopen("totalcustomers.txt","r");
+    if(clenFile!=NULL)
+    {
+        printf("\nCustomer Length File Opened");
+        while(!feof(clenFile))
+        {
+            fscanf(clenFile,"%d",&len);
+        }
+        fclose(clenFile);
+    }
+    else
+    {
+        printf("\nCustomer Length File Not Exist");
+    }
+
+
+    //Get Shop:
+    shoplistFile=fopen("shoplist.txt","r");
+    if(shoplistFile!=NULL)
+    {
+        printf("\nShop list File Opened");
+        while(!feof(shoplistFile))
+        {
+            for(i=0; i<len; i++)
+            {
+                fscanf(shoplistFile,"%s %s %d %d",&shop[i].shopName,&shop[i].shopOwner,&shop[i].discount,&shop[i].phoneNo);
+            }
+        }
+        fclose(shoplistFile);
+    }
+
+
+    //Get Customers:
+    cusFile=fopen("customerslist.txt","r");
+    if(cusFile!=NULL)
+    {
+        printf("\nCustomers File Opened");
+        while(!feof(cusFile))
+        {
+            for(i=0; i<len; i++)
+            {
+                fscanf(cusFile,"%s %d %s %d %d %d %d",&cList[i].name,&cList[i].phoneNo,&cList[i].shipped,&cList[i].price,&cList[i].day,&cList[i].mon,&cList[i].year);
+            }
+        }
+        fclose(cusFile);
+    }
+    else
+    {
+        printf("\nCustomer Not Exist");
+    }
+    //Get Cash:
+    cashFile=fopen("totalcash.txt","r");
+    if(cashFile!=NULL)
+    {
+        printf("\nTotal Cash File Opened");
+        while(!feof(cashFile))
+        {
+
+            fscanf(cashFile,"%d",&sCash);
+
+        }
+        fclose(cashFile);
+    }
+    else
+    {
+        printf("\nCash Not Exist");
+    }
+
+    //Get Today Sold:
+    soldFile=fopen("todysell.txt","r");
+    if(soldFile!=NULL)
+    {
+        printf("\nToday Sold File Opened");
+        while(!feof(soldFile))
+        {
+            fscanf(soldFile,"%d",&sSold);
+        }
+        fclose(soldFile);
+    }
+    else
+    {
+        printf("\Sold File Not Exist");
+    }
+
+    //get Shop Info list:
+    shopinfoFile=fopen("shopinfo.txt","r");
+
+    if(shopinfoFile!=NULL)
+    {
+
+        while(!feof(shopinfoFile))
+        {
+            for(i=0; i<5; i++)
+            {
+                fscanf(shopinfoFile,"%s %s %d %d",&sinfoList[i].shopName,&sinfoList[i].ownerName,&sinfoList[i].phoneNo,&sinfoList[i].discount);
+            }
+        }
+        fclose(shopinfoFile);
+    }
+
+
+    ///start program body
+    ///Check is Owner:
+
+    printf("\n\n\t:::===============================================:::");
+    printf("\n\t:::     *Shopping Center Management System*       :::");
+    printf("\n\t:::-----------------------------------------------:::");
+
+
+    while(rerun=='y')
+    {
+        printf("\n\t:::1.Mall Management\t2.Selling System          :::\n\t:::3.Customers System\t4.Mall Information        :::\n\t>");
+        scanf("%d",&getChoice);
+
+
+        if(getChoice==1)
+        {
+            ///Asfauqe:
+            mallmanagementStyem();
+
+        }
+        else if(getChoice==2)
+        {
+
+            ///Utsa
+            sellingSystem();
+
+        }
+        else if(getChoice==3)
+        {
+            ///Sharif:
+            customerSystem();
+        }
+        else if(getChoice==4)
+        {
+            mallInformation();
+        }
+        else
+        {
+            printf("\n\t:::===============================================:::");
+            printf("\n\t:::            %d has not any option              :::",getChoice);
+            printf("\n\t:::===============================================:::");
+        }
+
+
+        printf("\n\t:::===============================================:::");
+        printf("\n\t:::Do you want to Re-run(y/n):");
+        scanf(" %c",&rerun);
+        printf("\t:::===============================================:::\n");
+    }
+
+
+
+}
+
+
+
+void mallmanagementStyem()
+{
+    FILE *shopinfoFile;
+    int choose,updtDis,shopPhone,getshopPhone,setshopDis;
+    char opinion='y';
+
+
+    printf("\n\tShopping Mall Management System\n\t...............................");
+
+
+
+    while(opinion=='y')
+    {
+        printf("\n\tWhat do you want?");
+        printf("\n\t1.Shop List\t2.Set Shop Discount\n\t3.Mall Discount\t4.Mall Info\n\t5.Worker List");
+        printf("\n\t>");
+        scanf("%d",&choose);
+        switch(choose)
+        {
+        case 1:
+            printf("\tTotal Shop:5\n\tShop Name List:\n");
+            for(i=0; i<5; i++)
+            {
+                printf("\n\tShop Name:%s\n",sinfoList[i].shopName);
+
+            }
+            break;
+        case 2:
+            printf("\tShop Owner List:\n");
+            for(i=0; i<5; i++)
+            {
+                printf("\n\t%d.Shop Name:%s\n\tOwner Name:%s\n\tPhone:%d\n\tDiscount:%d",i+1,sinfoList[i].shopName,sinfoList[i].ownerName,sinfoList[i].phoneNo,sinfoList[i].discount);
+                printf("\n");
+            }
+
+            printf("\n\tEnter phone number for \nset discount for unique shop:");
+            scanf("%d",&shopPhone);
+            printf("\n\tEnter Discount Percentage:",setshopDis);
+            scanf("%d",&setshopDis);
+
+
+            for(i=0; i<5; i++)
+            {
+                if(sinfoList[i].phoneNo==shopPhone)
+                {
+                    printf("\n\tThis shop already discount:%d",sinfoList[i].discount);
+                    ///Work on this line:
+                }
+            }
+            printf("\n\t%d phone no have not any shop",shopPhone);
+
+
+
+
+            break;
+        case 3:
+            while(opinion=='y')
+            {
+                printf("\n\tWhat do you want?\n\t1.Available Discount\n\t2.Update Discount\n\t>");
+                scanf("%d",&choose);
+                if(choose==1)
+                {
+                    printf("\tAvailable Discount:%d",mallDis);
+                }
+                else if(choose==2)
+                {
+                    printf("\n\tYou select update discount:\n");
+                    printf("\n\tEnter Discount percentage:");
+                    scanf("%d",&updtDis);
+
+                    mallDisFile=fopen("malldiscount.txt","w");
+                    if(mallDisFile!=NULL)
+                    {
+
+
+                        fprintf(mallDisFile,"%d",updtDis);
+
+                        printf("\n\tDiscount Updated");
+                        fclose(mallDisFile);
+
+
+                    }
+                    else
+                    {
+                        printf("\n Mall discount file Not Exist");
+                    }
+                }
+                else
+                {
+                    printf("\n\tYou Select Wrong");
+                }
+                printf("\n\tDo you want to re-run(y/n):");
+                scanf(" %c",&opinion);
+            }
+            break;
+
+        case 4:
+            printf("\tMall Information:\n");
+            printf("\tMall Name:My City Mall\n\tAddress:Dhaka,Bangladesh\n\t*You can shopping from us on line and off line*");
+            break;
+        case 5:
+            printf("Worker List");
+            break;
+        default:
+            printf("\tNot have any option");
+
+        }
+
+        fflush (stdin);
+        printf("\nAre you to re-run(y/n):");
+        scanf(" %c",&opinion);
+    }
+}
+void sellingSystem()
+{
+    while(rerun=='y')
+    {
+        printf("\n\t:::==========================:::");
+        printf("\n\t::: Are You Shop Owner(y/n)? :::");
+        printf("\n\t>");
+        scanf(" %c",&isOwner);
+        printf("\t:::============================:::\n");
+        if(isOwner=='y')
+        {
+            printf("\n\t:::=================:::");
+            printf("\n\t::: Enter Your Lock :::\n\t>");
+            scanf("%d",&ulock);
+            printf("\n\t:::=================:::\n");
+
+
+            if(slock==ulock)
+            {
+                while(rerun=='y')
+                {
+
+                    printf("\n\n\t:::===============================================:::");
+                    printf("\n\t:::===============================================:::");
+                    printf("\n\t:::=::=::=::=: Welcome to Your Fashion :=::=::=::=:::");
+                    printf("\n\t:::-----------------------------------------------:::");
+                    printf("\n\t:::         Owner:Utsa Chandra Sutradhar          :::");
+                    printf("\n\t:::-----------------------------------------------:::");
+                    printf("\n\t:::             My Shop ID:201-35-523             :::");
+                    printf("\n\t:::-----------------------------------------------:::");
+                    printf("\n\t:::               Phone:01866478941               :::");
+                    printf("\n\t:::-----------------------------------------------:::");
+                    printf("\n\t:::              Shop No:Block A-01               :::");
+                    printf("\n\t:::-----------------------------------------------:::");
+                    printf("\n\t:::           <-Today Discount %d Percent->       :::",sDisount);
+                    printf("\n\t:::-----------------------------------------------:::");
+                    printf("\n\t:::===============================================:::");
+                    printf("\n\t:::===============================================:::");
+                    printf("\n\t:::Hey What do you want to do?                    :::");
+                    printf("\n\t:::                                               :::");
+
+                    printf("\n\t:::1.Customer List\t2.Set Today Discount      :::\n\t:::3.To-day Sell\t4.Customers Handle        :::\n\t:::5.Shop Information                             :::\n\t   >");
+                    scanf("%d",&opinio);
+                    if(opinio==1)
+                    {
+                        while(rerun=='y')
+                        {
+                            printf("\n\t:::What you want?                                 :::\n\t:::1.Search Customer                              :::\n\t:::2.CustomersList                                :::\n\t:::3.Check Birthday                               :::");
+                            printf("\n\t   >");
+                            scanf("%d",&sSecretNo);
+                            if(sSecretNo==1)
+                            {
+                                printf("\n\t:::===============================================:::");
+                                printf("\n\t:::Enter customer phone no                        :::");
+                                printf("\n\t   >");
+                                scanf("%d",&searchNo);;
+                                printf("\n\t:::===============================================:::");
+
+
+                                for(i=0; i<len; i++)
+                                {
+                                    if(cList[i].phoneNo==searchNo)
+                                    {
+                                        printf("\n\t:::Customer Information                           :::");
+                                        printf("\n\t:::Information of %d phone no customer            :::",searchNo);
+                                        printf("\n\t:::Name:%s                                      :::\n\t:::Shopped:%s                                  :::\n\t:::Price:%d                                       :::\n\t:::Date:%d-%d-%d                                        :::",cList[i].name,cList[i].shipped,cList[i].price,cList[i].day,cList[i].mon,cList[i].year);
+                                        break;
+
+                                    }
+                                    else
+                                    {
+                                        printf("\nSorry Not any Customer exist in %d phone no",searchNo);
+                                    }
+                                }
+                            }
+                            else if(sSecretNo==2)
+                            {
+                                printf("\n\t:::===============================================:::");
+                                printf("\n\t:::Customer List                                  :::\n");
+                                printf("\n\t:::===============================================:::");
+
+                                for(i=0; i<len; i++)
+                                {
+                                    printf("\n\t:::Name:%s                                      :::\n\t:::Phone No:%d                                    :::\n\t:::Shipped:%s                                  :::\n\t:::Price:%d                                       :::\n\t:::Date:%d-%d-%d                                        :::",cList[i].name,cList[i].phoneNo,cList[i].shipped,cList[i].price,cList[i].day,cList[i].mon,cList[i].year);
+                                    printf("\n\t:::===============================================:::");
+                                    printf("\n");
+                                }
+                            }
+                            else if(sSecretNo==3)
+                            {
+                                ///Get Current Data:
+                                T=time(NULL);
+                                tm=*localtime(&T);
+
+                                ///Checking User Birthday:
+                                printf("\n\t:::Today Birthday Customers                       :::");
+                                for(i=0; i<len; i++)
+                                {
+                                    if(cList[i].day==tm.tm_mday && cList[i].mon==tm.tm_mon+1)
+                                    {
+
+                                        printf("\n\t:::Name:%s                                      :::\n\t:::Shopped:%s                                  :::\n\t:::Price:%d                                       :::\n\t:::Date:%d-%d-%d (Birthday)                                        :::",cList[i].name,cList[i].shipped,cList[i].price,cList[i].day,cList[i].mon,cList[i].year);
+                                        printf("\n");
+
+                                    }
+                                }
+                                printf("\n\tToday not have any customer's birthday");
+
+                            }
+                            else
+                            {
+                                printf("\n\t%d is no any option",sSecretNo);
+                            }
+
+                            printf("\n\n\t:::===============================================:::");
+                            printf("\n\t:::Do you want to Re-run(y/n):");
+                            scanf(" %c",&rerun);
+                            printf("\t:::===============================================:::");
+                        }
+
+
+                    }
+                    else if (opinio==2)
+                    {
+                        printf("\nLast Discount %d percent.\nDo you want to change today discount(y/n):",sDisount);
+                        scanf(" %c",&isDChange);
+                        if(isDChange=='y')
+                        {
+                            printf("Enter To-Day Discount:",sDisount);
+                            scanf("%d",&uDiscount);
+                            disFile=fopen("discount.txt","w");
+                            if(disFile!=NULL)
+                            {
+                                printf("\nFile Opened");
+                                fprintf(disFile,"%d",uDiscount);
+                                printf("\nCongress discount is Updated.\nTo-Day Discount is %d",uDiscount);
+                                fclose(disFile);
+                            }
+                            else
+                            {
+                                printf("\nFile Error.");
+                            }
+                        }
+                        else
+                        {
+                            printf("\n\t:::===============================================:::");
+                            printf("\n\t:::Ok Re-run your program                         :::");
+                            printf("\n\t:::===============================================:::");
+
+                        }
+
+                    }
+                    else if(opinio==3)
+                    {
+                        printf("\nToday Total Sold %d BDT",sSold);
+                    }
+                    else if (opinio==4)
+                    {
+                        printf("\nHi, Welcome to Young Fashion.\nThanks for coming.\nWhat do you want to buy?:\n");
+                        printf("1.Shirt\n");
+                        printf("2.T-Shirt\n");
+                        printf("3.Gens\n");
+                        printf("4.Jacket\n");
+                        printf("5.Others\n");
+
+                        printf("\nChoose anyone:");
+                        scanf("%d",&uCategory);
+                        if(uCategory==1)
+                        {
+                            printf("\nYou select Shirt.\nEnter Your Size:\n1.M\t2.XL\n3.XXL\t4.Others");
+                            printf("\nChoose anyone:");
+                            scanf("%d",&uSize);
+                            if(uSize==1)
+                            {
+                                printf("\nYou Select M Size");
+                                printf("\nPlease Select Your Color:\n1.White\t2.Black\n3.Purple\t4.Others");
+                                printf("\nChoose anyone:");
+                                scanf("%d",&uColour);
+                                if(uColour==1)
+                                {
+                                    printf("\nYou select White Color");
+
+                                    printf("\nPrice of Shirt  is %d",sPrice);
+                                    discount_amount = (sDisount*sPrice)/100;
+                                    aDiscount = (sPrice-discount_amount);
+
+                                    birth_amount=(20*aDiscount)/100;
+                                    bDiscount=(aDiscount-birth_amount);
+
+                                    printf("\nAfter adding Discount price is %d\n",aDiscount);
+                                    printf("\nAre You agree with this price(y/n)");
+                                    scanf(" %c",&isBuyed);
+
+                                    if(isBuyed=='y')
+                                    {
+
+                                        T=time(NULL);
+                                        tm=*localtime(&T);
+                                        int d,m,y;
+                                        printf("\nSir,\n Whats Your Name:");
+                                        getchar();
+                                        gets(cName);
+                                        printf("\nPhone Number:");
+                                        scanf("%d",&cPhone);
+                                        printf("\nDOB (d-m-year):");
+                                        scanf("%d-%d-%d",&d,&m,&y);
+
+                                        //Get Cash:
+                                        cashFile=fopen("totalcash.txt","w");
+                                        if(cashFile!=NULL)
+                                        {
+                                            if(d==tm.tm_mday && m==tm.tm_mon+1)
+                                            {
+                                                fprintf(cashFile,"%d",(sCash + bDiscount));
+                                                fclose(cashFile);
+                                            }
+                                            else
+                                            {
+                                                fprintf(cashFile,"%d",(sCash + aDiscount));
+                                                fclose(cashFile);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            printf("\nCash Not Exist");
+                                        }
+
+                                        soldFile=fopen("todysell.txt","w");
+                                        if(soldFile!=NULL)
+                                        {
+                                            if(d==tm.tm_mday && m==tm.tm_mon+1)
+                                            {
+                                                fprintf(soldFile,"%d",(sSold+bDiscount));
+                                            }
+                                            else
+                                            {
+                                                fprintf(soldFile,"%d",(sSold+aDiscount));
+                                            }
+                                            fclose(soldFile);
+                                        }
+                                        else
+                                        {
+                                            printf("\Sold File Not Exist");
+                                        }
+                                        //Increase Customer Len:
+                                        clenFile=fopen("totalcustomers.txt","w");
+                                        if(clenFile!=NULL)
+                                        {
+                                            fprintf(clenFile,"%d",(len + 1));
+                                            fclose(clenFile);
+                                        }
+                                        else
+                                        {
+                                            printf("\nCustomer Length File Not Exist");
+                                        }
+
+                                        cusFile=fopen("customerslist.txt","a");
+                                        if(cusFile!=NULL)
+                                        {
+
+                                            printf("\nCustomers File Opened\n");
+
+
+
+                                            printf("%d",bDiscount);
+                                            if(d==tm.tm_mday && m==tm.tm_mon+1)
+                                            {
+                                                fprintf(cusFile,"%s %d %s %d %d %d %d\n",cName,cPhone,"Shirt",bDiscount,d,m,y);
+
+                                                printf("\nHappy Birthday Sir,\nYou also find 20 percent Discount,\nHere is your bill:");
+                                                printf("\nName:%s\nPhone:%d\nItem:Shirt\nSize:M\nColor:White\nPrice:%d",cName,cPhone,bDiscount);
+                                            }
+                                            else
+                                            {
+                                                fprintf(cusFile,"%s %d %s %d %d %d %d\n",cName,cPhone,"Shirt",aDiscount,d,m,y);
+
+                                                printf("\nHere is your bill:");
+                                                printf("\nName:%s\nPhone:%d\nItem:Shirt\nSize:M\nColor:White\nPrice:%d",cName,cPhone,aDiscount);
+                                            }
+                                            fclose(cusFile);
+                                        }
+                                        else
+                                        {
+                                            printf("\nCustomer Not Exist");
+                                        }
+
+                                        printf("\n*|Congress|*");
+
+                                    }
+                                    else
+                                    {
+                                        printf("\nOk No  problem Sir.\n");
+                                    }
+                                }
+                                else if(uColour==2)
+                                {
+
+                                }
+                                else if(uColour==3)
+                                {
+
+                                }
+                                else if(uColour==4)
+                                {
+
+                                }
+                                else
+                                {
+
+                                }
+
+                            }
+                            else if(uSize==2)
+                            {
+                            }
+                            else if(uSize==3)
+                            {
+                            }
+                            else if(uSize==4)
+                            {
+                            }
+                            else
+                            {
+                                printf("\n Not Others Color Available");
+                            }
+
+                        }
+                        else if(uCategory==2)
+                        {
+                        }
+                        else if(uCategory==3)
+                        {
+                        }
+                        else if(uCategory==4)
+                        {
+                        }
+                        else if(uCategory==5)
+                        {
+                        }
+                        else
+                        {
+                            printf("\nComing Soon...");
+                        }
+
+                    }
+                    else if (opinio==5)
+                    {
+                        printf("\n\t:::=================:::");
+                        printf("\nEnter Your Shop Lock:\n\t>");
+                        scanf("%d",&ulock);
+                        if(slock==ulock)
+                        {
+                            printf("\nShop Information:");
+                            printf("\n\t:::============================:::");
+                            printf("\n\t::: Today Discount:%d percent \n\t:::============================:::\n\t:::Shop Secret No:%d       :::\n\t:::============================:::\n\t:::Shop Lock:%d      :::\n\t:::============================:::\n\t.Total Case:%d BDT",sDisount,sSecretNo,slock,sCash);
+                            printf("\n\t:::============================:::");
+                        }
+                    }
+                    else
+                    {
+                        printf("!Sorry! In Correct.");
+                    }
+
+                    printf("\n\n\t:::===============================================:::");
+                    printf("\n\t:::Do you want to Re-run(y/n):");
+                    scanf(" %c",&rerun);
+                    printf("\t:::===============================================:::");
+                }
+            }
+            else
+            {
+                printf("\n\t:::=================================:::");
+                printf("\n\t:::Sorry! %d is not a valid Lock     :::\n\t:::Do you want to forgot lock (y/n)?:::\n\t>",ulock);
+                getchar();
+                scanf("%c",&isWtf);
+                if(isWtf=='y')
+                {
+                    printf("\nEnter Shop Secret No:");
+                    scanf("%d",&uSecretNo);
+                    if(sSecretNo==uSecretNo)
+                    {
+                        printf("\nEnter New Password:");
+                        scanf("%d",&nPassOne);
+                        printf("\nEnter Confirm Password:");
+                        scanf("%d",&nPassTwo);
+
+                        if(nPassOne==nPassTwo)
+                        {
+                            passFile=fopen("password.txt","w");
+                            if(passFile!=NULL)
+                            {
+                                //printf("\nFile Opened");
+                                fprintf(passFile,"%d",nPassOne);
+                                printf("\n\t:::===============================:::");
+                                printf("\n\t::: Congress Password is Updated  :::\n\t::: New Password is %d           :::",nPassOne);
+                                printf("\n\t:::===============================================:::");
+                                fclose(passFile);
+                            }
+                            else
+                            {
+                                printf("\nFile Error.");
+                            }
+                        }
+                        else
+                        {
+                            printf("\n\t:::===============================================:::");
+                            printf("\n\t:::Sorry Password are not match                 :::",uSecretNo);
+                            printf("\n\t:::===============================================:::");
+                        }
+                    }
+                    else
+                    {
+                        printf("\n\t:::===============================================:::");
+                        printf("\n\t:::Sorry! %d is not shop secret No              :::",uSecretNo);
+                        printf("\n\t:::===============================================:::");
+
+                    }
+                }
+                else
+                {
+                    printf("\nYour enter No. Thanks");
+                }
+
+
+            }
+
+
+
+
+        }
+        else
+        {
+            printf("\n\t:::===============================================:::");
+            printf("\n\t:::            Sorry! Have a nice day             :::");
+        }
+
+        printf("\n\t:::===============================================:::");
+        printf("\n\t:::Do you want to Re-run(y/n):");
+        scanf(" %c",&rerun);
+    }
+}
+
+void customerSystem()
+{
+    ///Starting Point:
+    FILE *cinfoFIle,*cilenFile;
+    int choose,i,cilen;
+    char agree[3];
+
+
+
+
+    printf("what do you want?\n 1. Buy \n 2. visiting\n ");
+    printf("--------------------------------\n");
+    printf("choose any option:\n");
+    scanf("%d",&choose);
+    switch (choose)
+    {
+    case 1:
+        printf("You select buy\n shop list:\n");
+        printf(" 1. Mobile shop\n 2. Laptop shop\n 3. Fashion shop\n 4. Cosmetics Shop\n");
+        printf("---------------------\n");
+        printf("choose any option from shop list:");
+        scanf("%d",&choose);
+        if(choose == 1)
+        {
+            printf("mobile Shop\n");
+            printf("Which Brand mobile phone you want to buy:\n");//Samsung.Apple.Huawei.Nokia.
+            printf(" 1. I phone\n 2. Samsung\n 3. Redmi\n 4. Nokia\n ");
+            printf("-------------------\n");
+            printf("choose any option from brand list:\n");
+            scanf("%d",&choose);
+            if(choose == 1)
+            {
+                printf("I phone\n i phone details:\n");
+                printf(" 5.5 Display \n 16GB ROM\n 1GB RAM\n Camera 50 MP\n Battery 5000mph\n Color black\n ");
+                printf("price 9000 BDT\n");
+                printf("Are you want to buy this Phone(yes/no)\n");
+                scanf(" %c",&agree[3]);
+                if(agree[3] = "yes")
+                {
+                    fflush(stdin);
+                    int d,m,y,ciphone;
+                    char ciName[30];
+                    printf("\nSir,\n Whats Your Name:");
+                    gets(ciName);
+                    printf("\nPhone Number:");
+                    scanf("%d",&ciphone);
+                    printf("\nDOB (d-m-year):");
+                    scanf("%d-%d-%d",&d,&m,&y);
+                    //printf("\ncongress for buy this product \n Please come again\n");///need file to apply
+
+
+                    //Increase Customer Len:
+                    clenFile=fopen("totalcustomers.txt","w");
+                    if(clenFile!=NULL)
+                    {
+                        fprintf(clenFile,"%d",len+1);
+                        fclose(clenFile);
+                    }
+                    else
+                    {
+                        printf("\nCustomer Length File Not Exist");
+                    }
+
+                    cusFile=fopen("customerslist.txt","a");
+                    if(cusFile!=NULL)
+                    {
+                        printf("\nCustomers File Opened");
+
+                        fprintf(cusFile,"%s %d %s %d %d %d %d\n",ciName,ciphone,"Mobile",100000,d,m,y);
+                        // printf("\nSir,\nHere is your bill:");
+                        // printf("\nName:%s\nPhone:%d\nItem:Shirt\nSize:M\nColor:White",cName,ciPhone);
+
+                        fclose(cusFile);
+                    }
+                    else
+                    {
+                        printf("\nCustomer Not Exist");
+                    }
+
+                    printf("\nDone");
+
+
+                }
+                else
+                {
+                    printf("Sorry! Please come again\n");
+                }
+
+            }
+
+            else
+            {
+                printf ("this brand is not available its coming soon...");
+            }
+
+        }
+        else if(choose == 2)
+        {
+            printf("computer Shop");
+            printf("Which Brand Laptop you want to buy:\n");
+            printf(" 1. Lenovo\n 2. ASUS\n 3. Dell\n 4. Apple ");
+            printf("choose any option from brand list:\n");
+            scanf("%d",&choose);
+            if(choose == 2)
+            {
+                printf("ASUS\n ASUS Laptop Details:\n");
+                printf(" Screen Size 17.9 inch\n Generation 10Th\n CORE i7\n ");
+                printf("price 70000 BDT\n");
+                printf("Are you want to buy this Laptop(yes/no)\n");
+                scanf(" %c",&agree[3]);
+                if(agree[3] = "yes")
+                {
+                    printf("\ncongress for buy this product \n Please come again");
+
+                }
+                else
+                {
+                    printf("\Sorry! Please come again\n");
+                }
+
+            }
+
+            else
+            {
+                printf ("this brand is not available its coming soon...");
+            }
+
+        }
+        else if(choose == 3)
+        {
+            printf("Fashion Shop");
+        }
+        else if(choose == 4)
+        {
+            printf("cosmetics Shop");
+        }
+        else
+        {
+            printf("you select wrong");
+        }
+
+
+        break;
+    case 2:
+        printf("you select visiting");
+        for(i=0; i<len; i++)
+        {
+            printf("\n\t:::Name:%s                                      :::\n\t:::Shopped:%s                                  :::\n\t:::Price:%d                                       :::\n\t:::Date:%d-%d-%d                                        :::",cList[i].name,cList[i].shipped,cList[i].price,cList[i].day,cList[i].mon,cList[i].year);
+
+            printf("\n\t:::===============================================:::");
+            printf("\n");
+        }
+
+        printf("\n\n\t\tStudytonight - Best place to learn\n\n\n");
+
+        time_t t;   // not a primitive datatype
+        time(&t);
+
+        printf("\nThis program has been writeen at (date and time): %s", ctime(&t));
+
+        printf("\n\n\t\t\tCoding is Fun !\n\n\n");
+        break;
+    default:
+        printf("you select wrong");
+        break;
+
+    }
+
+}
+
+void mallInformation()
+{
+    printf("\n\tCity Shopping Mall\n\tAddress:Dhaka,Bangladesh");
+}
+
+
+
